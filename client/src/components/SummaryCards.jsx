@@ -45,10 +45,12 @@ export function SummaryCards({ insights, cleaningSummary, runStats }) {
         </div>
 
         {ratingMismatch && (
-          <div className="stat-card stat-tech">
-            <span className="stat-label">Rating Agreement</span>
+          <div className="stat-card stat-agreement">
+            <span className="stat-label">Agreement %</span>
             <span className="stat-value">{ratingMismatch.agreementPercent}%</span>
-            <span className="stat-sub">{ratingMismatch.mismatchCount} mismatches flagged</span>
+            <span className="stat-sub">
+              {ratingMismatch.mismatchCount} mismatch{ratingMismatch.mismatchCount === 1 ? "" : "es"} in {ratingMismatch.ratedCount || 0} rated
+            </span>
           </div>
         )}
 

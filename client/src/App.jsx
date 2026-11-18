@@ -147,6 +147,39 @@ export default function App() {
             reviews={data.reviews}
             onReplyClick={handleOpenReplyModal}
           />
+
+          {/* Cost and Speed Footer */}
+          {data.runStats && (
+            <footer className="cost-speed-footer">
+              <div className="footer-stat-item">
+                <span className="footer-icon">⚡</span>
+                <span className="footer-label">Total Processing Time:</span>
+                <strong className="footer-val">{data.runStats.elapsedMs} ms</strong>
+              </div>
+              <div className="footer-stat-item">
+                <span className="footer-icon">🤖</span>
+                <span className="footer-label">AI Calls:</span>
+                <strong className="footer-val">{data.runStats.aiCalls}</strong>
+              </div>
+              <div className="footer-stat-item">
+                <span className="footer-icon">💾</span>
+                <span className="footer-label">Cache Hits:</span>
+                <strong className="footer-val">{data.runStats.cacheHits}</strong>
+              </div>
+              <div className="footer-stat-item">
+                <span className="footer-icon">💰</span>
+                <span className="footer-label">Cache Efficiency:</span>
+                <strong className="footer-val">
+                  {Math.round(
+                    (data.runStats.cacheHits /
+                      (data.runStats.aiCalls + data.runStats.cacheHits || 1)) *
+                      100
+                  )}
+                  % saved
+                </strong>
+              </div>
+            </footer>
+          )}
         </>
       ) : (
         /* Empty State before any upload */

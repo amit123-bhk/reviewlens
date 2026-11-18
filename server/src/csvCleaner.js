@@ -30,6 +30,7 @@ export function cleanCsv(csvInput) {
   });
 
   const seenTexts = new Map();
+  const INJECTION_REGEX = /ignore\s+(?:all\s+)?previous\s+instructions/i;
 
   return records.map((record) => {
     const rawId = record.review_id ?? record.id;
@@ -37,6 +38,7 @@ export function cleanCsv(csvInput) {
     const rawText = record.text ?? record.review_text ?? record.review ?? "";
     const cleanedText = stripHtml(String(rawText));
     const rating = parseRating(record.rating);
+    const possible_injection = INJECTION_REGEX.test(cleanedText);
 
     if (!reviewId) {
       return {
@@ -46,6 +48,7 @@ export function cleanCsv(csvInput) {
         text: cleanedText,
         status: "invalid_row",
         duplicateOf: null,
+        possible_injection: false,
       };
     }
 
@@ -57,6 +60,7 @@ export function cleanCsv(csvInput) {
         text: "",
         status: "skipped_empty",
         duplicateOf: null,
+        possible_injection: false,
       };
     }
 
@@ -75,6 +79,7 @@ export function cleanCsv(csvInput) {
       text: cleanedText,
       status: "valid",
       duplicateOf,
+      possible_injection,
     };
   });
 }

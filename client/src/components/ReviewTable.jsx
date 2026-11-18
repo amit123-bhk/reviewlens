@@ -125,17 +125,36 @@ export function ReviewTable({ reviews, onReplyClick }) {
                 const sentiment = rev.analysis?.sentiment || rev.status;
                 const needsReply = rev.analysis?.needs_reply;
                 const hasCachedReply = Boolean(rev.suggestedReply);
+                const hasInjection = Boolean(rev.possible_injection);
+                const isMismatch =
+                  rev.rating !== null &&
+                  rev.rating !== undefined &&
+                  ((rev.rating >= 4 && rev.analysis?.sentiment === "negative") ||
+                    (rev.rating <= 2 && rev.analysis?.sentiment === "positive"));
 
                 return (
                   <tr key={rev.review_id || Math.random()}>
                     {/* Review ID */}
                     <td className="cell-id">
-                      <strong>{rev.review_id || "N/A"}</strong>
+                      <div className="id-title-row">
+                        <strong>{rev.review_id || "N/A"}</strong>
+                        {hasInjection && (
+                          <span
+                            className="warning-icon injection-icon"
+                            title="Possible prompt injection: phrase like 'ignore previous instructions' detected"
+                          >
+                            ⚠️
+                          </span>
+                        )}
+                      </div>
                       {rev.duplicateOf && (
                         <span className="badge-tag tag-dup">dup of {rev.duplicateOf}</span>
                       )}
                       {rev.status === "skipped_empty" && (
                         <span className="badge-tag tag-skipped">empty</span>
+                      )}
+                      {hasInjection && (
+                        <span className="badge-tag tag-injection">injection attempt</span>
                       )}
                     </td>
 
@@ -148,6 +167,14 @@ export function ReviewTable({ reviews, onReplyClick }) {
                         <span className="star-rating">★ {rev.rating}</span>
                       ) : (
                         <span className="no-rating">—</span>
+                      )}
+                      {isMismatch && (
+                        <span
+                          className="badge-tag tag-mismatch"
+                          title="Rating vs Sentiment Mismatch"
+                        >
+                          ⚠️ Mismatch
+                        </span>
                       )}
                     </td>
 
