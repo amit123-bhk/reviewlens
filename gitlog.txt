@@ -1,0 +1,119 @@
+commit 78aba1fa0d1cdd8a65e4344472d22c704a98d378
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-19 19:21:40 +0530
+
+    docs: add live Railway deployment URL to README
+
+commit 431f3184e4b151fc0d3b5a405ba914b159eea431
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-19 19:16:55 +0530
+
+    chore(deploy): add root build scripts and production static asset serving
+
+commit f9dcb53f1d8d5185ce8691c4c1d519ebed84e9a3
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-19 19:08:28 +0530
+
+    feat(ui): add rating mismatch and injection flags to reviews table, update docs with screenshots
+
+commit 9f774d65746dd3a002b090d20ffc0293bda037dd
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-19 17:20:37 +0530
+
+    feat(ui): redesign dashboard with minimal professional layout and reply drawer
+
+commit a4907ae219cf21a0fd9d11a389d861e238bc646d
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-19 15:53:17 +0530
+
+    refactor(ui): clean up styling, remove decorative emojis, and refine typography
+
+commit 341855cf6eac08c0c007166d28c370bb922e7141
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-19 15:17:58 +0530
+
+    docs: add setup guide, architecture flow, and screenshot docs
+
+commit e3cecac98ea2ae4b1a7619e8cff3be6955d15bbd
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-19 02:15:00 +0530
+
+    feat: add bonus features - mismatch badge, agreement card, speed footer, and injection flag
+
+commit 8a42190fe7ef9c4a30f3611d311eb0ec6c2757a3
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-19 01:45:00 +0530
+
+    docs: add comprehensive README with architecture, setup guide, and test suite verification
+
+commit a4812689943b737234c1ff0a7fa7bde69e90b3f2
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-19 00:45:00 +0530
+
+    feat(client): add dynamic dropdown filters, search, and suggested reply modal
+
+commit d0f4c2cfb8051d2c08cfe9456d3a22cbd017a77a
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 23:40:00 +0530
+
+    feat(client): implement core React analytics dashboard and KPI components
+
+commit 9e5a19294cabe2838b5904a884e63a33c72c3497
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 22:45:00 +0530
+
+    feat(api): wire Express endpoints for upload, results, insights, and suggested reply
+
+commit 41404ab981c88bbd4d082f6f330fab0b25ae0747
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 21:50:00 +0530
+
+    feat(insights): compute rating mismatch stats and extract top complaints and praises
+
+commit c1efcc0d54e72e85da980aca19629eef182b1c64
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 21:00:00 +0530
+
+    feat(pipeline): create end-to-end processing pipeline orchestrating cleaner, cache, and analyzer
+
+commit 1a719016c1f31d4566ee33fc2ded5610d731f12c
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 20:10:00 +0530
+
+    feat(cache): implement SHA-256 caching layer with Mongoose AnalysisCache
+
+commit c9b1f1082c9dd52d2cd3e6001030732d45599b4d
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 19:20:00 +0530
+
+    feat(analyzer): implement sequential batch analysis with single retry queue
+
+commit 4bd81f94c73724c8f919889490193fe856f1b154
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 18:30:00 +0530
+
+    feat(prompts): add injection-proof prompts with XML tag boundaries
+
+commit 036bf42ddd2fb5e5a02ef0c2b55f62aa10378370
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 17:45:00 +0530
+
+    feat(llm): implement resilient fetch client with exponential backoff and jitter
+
+commit 903ceb5575d122b3904d2c3a01005c5d47c90656
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 17:00:00 +0530
+
+    feat(schema): add strict validation and sanitization for LLM review analysis
+
+commit 84ddeaee10aab653ee1a9168d32af99077f2fbaf
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 16:15:00 +0530
+
+    feat(csv): implement CSV parser with HTML sanitization and duplicate detection
+
+commit 66f004491bde18d783ce278172ba8102679df430
+Author: amityadavWeb <yadav.amit1@webseeder.tech>
+Date:   2026-11-18 15:35:00 +0530
+
+    chore: initialize ReviewLens project structure and dependencies
