@@ -121,6 +121,12 @@ export function ReviewTable({ reviews, onReplyClick }) {
                 const isDuplicate = Boolean(rev.duplicateOf);
                 const isFailed =
                   rev.status === "invalid_row" || rev.status === "failed";
+                const hasInjection = Boolean(rev.possible_injection);
+                const isMismatch =
+                  rev.rating !== null &&
+                  rev.rating !== undefined &&
+                  ((rev.rating >= 4 && rev.analysis?.sentiment === "negative") ||
+                    (rev.rating <= 2 && rev.analysis?.sentiment === "positive"));
 
                 // Sentiment representation
                 let sentimentContent;
@@ -172,9 +178,29 @@ export function ReviewTable({ reviews, onReplyClick }) {
 
                 return (
                   <tr key={rev.review_id || `row-${idx}`}>
-                    <td className="cell-id">{rev.review_id || "N/A"}</td>
+                    <td className="cell-id">
+                      <div>{rev.review_id || "N/A"}</div>
+                      {hasInjection && (
+                        <span
+                          className="tag-flag tag-injection"
+                          title="Possible prompt injection: phrase like 'ignore previous instructions' detected"
+                        >
+                          Injection attempt
+                        </span>
+                      )}
+                    </td>
                     <td className="cell-product">{rev.product || "N/A"}</td>
-                    <td className="cell-rating">{ratingDisplay}</td>
+                    <td className="cell-rating">
+                      <div>{ratingDisplay}</div>
+                      {isMismatch && (
+                        <span
+                          className="tag-flag tag-mismatch"
+                          title="Rating vs Sentiment Mismatch"
+                        >
+                          Mismatch
+                        </span>
+                      )}
+                    </td>
                     <td>
                       <div className="cell-review" title={rev.text || ""}>
                         {rev.text || "N/A"}

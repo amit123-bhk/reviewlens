@@ -439,6 +439,30 @@ textarea:focus-visible {
   font-weight: 400;
 }
 
+/* Review Flags (Rating Mismatch & Injection Flags) */
+.tag-flag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+.tag-mismatch {
+  background-color: var(--bg);
+  color: var(--dot-neg);
+  border: 1px solid var(--dot-neg);
+}
+
+.tag-injection {
+  background-color: var(--bg);
+  color: var(--dot-neg);
+  border: 1px solid var(--dot-neg);
+}
+
 .cell-review {
   display: -webkit-box;
   -webkit-line-clamp: 2;

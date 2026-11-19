@@ -256,16 +256,14 @@ cd server && npm test
 
 ## 9. Dashboard Screenshots
 
-Place the screenshots in the `docs/` folder:
-
 1. **Dashboard Overview & KPIs**:
    ![Dashboard Overview](docs/dashboard-overview.png)
-   *Overview of KPI cards (Total Analysed, Sentiment %, Needs Reply, Agreement %), cleaning summary, and side-by-side Top 3 Complaints & Praises.*
+   *Full dashboard view highlighting the KPI cards (Total Analysed, Sentiment breakdown %, Needs Reply, Agreement %), the single-line cleaning summary, and side-by-side Top 3 Complaints & Praises.*
 
-2. **Filtered Review Table with Rating Mismatch & Injection Flags**:
-   ![Filters and Mismatches](docs/filters-and-mismatch.png)
-   *Review breakdown table demonstrating product/sentiment/topic filters, rating mismatch badge (R008), and prompt injection detection warning (R012).*
+2. **Filtered Review Table with Actionable Reply Buttons**:
+   ![Filtered Review Table](docs/filters-and-mismatch.png)
+   *Reviews table filtered by product and sentiment ("Negative"), displaying 2-line clamped reviews, sentiment dots, and quick "Suggest reply" action buttons.*
 
-3. **On-Demand AI Suggested Reply Modal**:
-   ![Suggested Reply Modal](docs/suggested-reply-modal.png)
-   *Modal showing courteous, bounded AI reply draft with one-click copy to clipboard.*
+3. **On-Demand AI Suggested Reply Drawer**:
+   ![Suggested Reply Drawer](docs/suggested-reply-modal.png)
+   *Slide-in reply drawer displaying the original customer review, polite and bounded AI-generated draft response, and one-click copy to clipboard.*
