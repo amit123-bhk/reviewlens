@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import multer from "multer";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
 import { connectDB } from "./db.js";
 import { processUpload } from "./pipeline.js";
 import { generateReviewReply } from "./replyService.js";
@@ -147,6 +150,20 @@ app.post("/api/reviews/:reviewId/reply", async (req, res, next) => {
     next(err);
   }
 });
+
+// Serve built frontend assets in production if available
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const clientDistPath = path.resolve(__dirname, "../../client/dist");
+
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/api")) {
+      return next();
+    }
+    res.sendFile(path.join(clientDistPath, "index.html"));
+  });
+}
 
 // Central error-handling middleware: returns { error } JSON without leaking stack traces or env values
 app.use((err, req, res, next) => {
