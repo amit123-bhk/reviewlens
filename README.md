@@ -2,6 +2,8 @@
 
 An AI-powered customer review analytics engine and store owner action dashboard. ReviewLens ingests customer review CSV files, sanitizes the text, batches and classifies sentiment/topics/summaries via an LLM, caches results by cryptographic hash in MongoDB, flags rating mismatches and prompt injection attempts, and drafts polite, bounded customer support replies on demand.
 
+🌐 **Live Deployment on Railway**: [https://reviewlens-app-production-bc70f107.up.railway.app](https://reviewlens-app-production-bc70f107.up.railway.app)
+
 ---
 
 ## 1. Setup on a Fresh Machine
