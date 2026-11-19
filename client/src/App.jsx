@@ -30,7 +30,7 @@ export default function App() {
         ]);
         if (results) setData(results);
         if (ins) setInsights(ins);
-      } catch (err) {
+      } catch {
         // First run or empty DB, silently show empty state
       }
     }

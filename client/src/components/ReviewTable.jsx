@@ -120,7 +120,7 @@ export function ReviewTable({ reviews, onReplyClick }) {
                 </td>
               </tr>
             ) : (
-              filtered.map((rev) => {
+              filtered.map((rev, idx) => {
                 const hasAnalysis = Boolean(rev.analysis);
                 const sentiment = rev.analysis?.sentiment || rev.status;
                 const needsReply = rev.analysis?.needs_reply;
@@ -133,7 +133,7 @@ export function ReviewTable({ reviews, onReplyClick }) {
                     (rev.rating <= 2 && rev.analysis?.sentiment === "positive"));
 
                 return (
-                  <tr key={rev.review_id || Math.random()}>
+                  <tr key={rev.review_id || `row-${idx}`}>
                     {/* Review ID */}
                     <td className="cell-id">
                       <div className="id-title-row">
