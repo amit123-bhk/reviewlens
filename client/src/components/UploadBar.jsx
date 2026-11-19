@@ -19,7 +19,7 @@ export function UploadBar({ onUpload, loading, error }) {
     <section className="card upload-card">
       <div className="upload-header">
         <h2>Upload Reviews CSV</h2>
-        <p>Upload a store review CSV file to clean, classify sentiment & generate insights.</p>
+        <p>Select a CSV file containing customer reviews to process.</p>
       </div>
 
       <div className="upload-controls">
@@ -48,8 +48,8 @@ export function UploadBar({ onUpload, loading, error }) {
         <div className="loading-banner">
           <div className="spinner"></div>
           <div>
-            <strong>Processing Ingestion Pipeline</strong>
-            <p>Cleaning text, batching LLM calls (5/chunk), checking cache & validating JSON...</p>
+            <strong>Processing reviews</strong>
+            <p>Cleaning records, checking cache, and running analysis...</p>
           </div>
         </div>
       )}

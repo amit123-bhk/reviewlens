@@ -68,7 +68,7 @@ export function SummaryCards({ insights, cleaningSummary, runStats }) {
       {/* Small counts bar for skipped, duplicates, failed */}
       <div className="cleaning-bar">
         <span>
-          <strong>Pipeline Cleaning Summary:</strong>
+          <strong>Cleaning summary:</strong>
         </span>
         <span className="badge badge-valid">
           Valid Analysed: {sentimentCounts.total}

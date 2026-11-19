@@ -138,14 +138,6 @@ export function ReviewTable({ reviews, onReplyClick }) {
                     <td className="cell-id">
                       <div className="id-title-row">
                         <strong>{rev.review_id || "N/A"}</strong>
-                        {hasInjection && (
-                          <span
-                            className="warning-icon injection-icon"
-                            title="Possible prompt injection: phrase like 'ignore previous instructions' detected"
-                          >
-                            ⚠️
-                          </span>
-                        )}
                       </div>
                       {rev.duplicateOf && (
                         <span className="badge-tag tag-dup">dup of {rev.duplicateOf}</span>
@@ -154,26 +146,31 @@ export function ReviewTable({ reviews, onReplyClick }) {
                         <span className="badge-tag tag-skipped">empty</span>
                       )}
                       {hasInjection && (
-                        <span className="badge-tag tag-injection">injection attempt</span>
+                        <span
+                          className="badge-tag tag-injection"
+                          title="Possible prompt injection: phrase like 'ignore previous instructions' detected"
+                        >
+                          injection attempt
+                        </span>
                       )}
                     </td>
 
                     {/* Product */}
-                    <td className="cell-product">{rev.product || "—"}</td>
+                    <td className="cell-product">{rev.product || "N/A"}</td>
 
-                    {/* Rating or "—" */}
+                    {/* Rating or N/A */}
                     <td className="cell-rating">
                       {rev.rating !== null && rev.rating !== undefined ? (
-                        <span className="star-rating">★ {rev.rating}</span>
+                        <span className="star-rating">{rev.rating} / 5</span>
                       ) : (
-                        <span className="no-rating">—</span>
+                        <span className="no-rating">N/A</span>
                       )}
                       {isMismatch && (
                         <span
                           className="badge-tag tag-mismatch"
                           title="Rating vs Sentiment Mismatch"
                         >
-                          ⚠️ Mismatch
+                          Mismatch
                         </span>
                       )}
                     </td>
@@ -201,7 +198,7 @@ export function ReviewTable({ reviews, onReplyClick }) {
                           </span>
                         ))
                       ) : (
-                        <span className="muted">—</span>
+                        <span className="muted">N/A</span>
                       )}
                     </td>
 
@@ -223,7 +220,7 @@ export function ReviewTable({ reviews, onReplyClick }) {
                           <span className="badge-reply-no">No</span>
                         )
                       ) : (
-                        <span className="muted">—</span>
+                        <span className="muted">N/A</span>
                       )}
                     </td>
 
@@ -237,7 +234,7 @@ export function ReviewTable({ reviews, onReplyClick }) {
                           {hasCachedReply ? "View reply" : "Suggest reply"}
                         </button>
                       ) : (
-                        <span className="muted">—</span>
+                        <span className="muted">N/A</span>
                       )}
                     </td>
                   </tr>

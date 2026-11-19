@@ -42,7 +42,7 @@ export function ReplyModal({
               </div>
             ) : error ? (
               <div className="reply-error" style={{ color: "#dc2626", padding: "8px 0" }}>
-                <span>⚠️ {error}</span>
+                <span>{error}</span>
               </div>
             ) : (
               <textarea

@@ -7,7 +7,6 @@ export function TopLists({ topComplaints, topPraises }) {
       {/* Top 3 Complaints */}
       <div className="card insight-card complaint-card">
         <div className="insight-title">
-          <span className="icon">⚠️</span>
           <h3>Top 3 Complaints</h3>
         </div>
         {complaints.length === 0 ? (
@@ -29,7 +28,6 @@ export function TopLists({ topComplaints, topPraises }) {
       {/* Top 3 Praises */}
       <div className="card insight-card praise-card">
         <div className="insight-title">
-          <span className="icon">🌟</span>
           <h3>Top 3 Praises</h3>
         </div>
         {praises.length === 0 ? (

@@ -118,7 +118,7 @@ export default function App() {
           <div className="brand-logo">RL</div>
           <div>
             <h1>ReviewLens</h1>
-            <p className="subtitle">AI Review Analytics & Store Owner Action Dashboard</p>
+            <p className="subtitle">Customer review sentiment, topic analysis, and response drafting</p>
           </div>
         </div>
       </header>
@@ -152,30 +152,26 @@ export default function App() {
           {data.runStats && (
             <footer className="cost-speed-footer">
               <div className="footer-stat-item">
-                <span className="footer-icon">⚡</span>
-                <span className="footer-label">Total Processing Time:</span>
+                <span className="footer-label">Processing time:</span>
                 <strong className="footer-val">{data.runStats.elapsedMs} ms</strong>
               </div>
               <div className="footer-stat-item">
-                <span className="footer-icon">🤖</span>
-                <span className="footer-label">AI Calls:</span>
+                <span className="footer-label">AI calls:</span>
                 <strong className="footer-val">{data.runStats.aiCalls}</strong>
               </div>
               <div className="footer-stat-item">
-                <span className="footer-icon">💾</span>
-                <span className="footer-label">Cache Hits:</span>
+                <span className="footer-label">Cache hits:</span>
                 <strong className="footer-val">{data.runStats.cacheHits}</strong>
               </div>
               <div className="footer-stat-item">
-                <span className="footer-icon">💰</span>
-                <span className="footer-label">Cache Efficiency:</span>
+                <span className="footer-label">Cache efficiency:</span>
                 <strong className="footer-val">
                   {Math.round(
                     (data.runStats.cacheHits /
                       (data.runStats.aiCalls + data.runStats.cacheHits || 1)) *
                       100
                   )}
-                  % saved
+                  % cached
                 </strong>
               </div>
             </footer>
@@ -185,7 +181,6 @@ export default function App() {
         /* Empty State before any upload */
         <div className="card empty-state-card">
           <div className="empty-state-content">
-            <span className="empty-state-icon">📊</span>
             <h3>No Reviews Analyzed Yet</h3>
             <p>
               Upload your store's <code>reviews.csv</code> file using the form
