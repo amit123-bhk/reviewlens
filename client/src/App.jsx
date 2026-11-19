@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { uploadCsv, fetchResults, fetchInsights, generateReply } from "./api.js";
+import { useState } from "react";
+import { uploadCsv, fetchInsights, generateReply } from "./api.js";
 import { UploadBar } from "./components/UploadBar.jsx";
 import { SummaryCards } from "./components/SummaryCards.jsx";
 import { TopLists } from "./components/TopLists.jsx";
@@ -19,23 +19,6 @@ export default function App() {
   const [replyLoading, setReplyLoading] = useState(false);
   const [replyError, setReplyError] = useState(null);
   const [copied, setCopied] = useState(false);
-
-  // Load latest run and insights on page load
-  useEffect(() => {
-    async function loadInitialData() {
-      try {
-        const [results, ins] = await Promise.all([
-          fetchResults(),
-          fetchInsights(),
-        ]);
-        if (results) setData(results);
-        if (ins) setInsights(ins);
-      } catch {
-        // First run or empty DB, silently show empty state
-      }
-    }
-    loadInitialData();
-  }, []);
 
   const handleUpload = async (file) => {
     setLoading(true);
