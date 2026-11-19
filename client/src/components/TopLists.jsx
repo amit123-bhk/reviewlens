@@ -3,48 +3,40 @@ export function TopLists({ topComplaints, topPraises }) {
   const praises = Array.isArray(topPraises) ? topPraises : [];
 
   return (
-    <div className="insights-grid">
+    <div className="top-lists-grid">
       {/* Top 3 Complaints */}
-      <div className="card insight-card complaint-card">
-        <div className="insight-title">
-          <h3>Top 3 Complaints</h3>
-        </div>
+      <section className="card top-list-card">
+        <h3 className="section-title">Top 3 Complaints</h3>
         {complaints.length === 0 ? (
-          <p className="empty-notice">No complaints found.</p>
+          <p className="empty-list-notice">No complaints found.</p>
         ) : (
-          <ul className="insight-list">
+          <ol className="numbered-list">
             {complaints.map((item, idx) => (
-              <li key={idx} className="insight-item">
-                <div className="item-header">
-                  <span className="topic-badge topic-neg">{item.title}</span>
-                </div>
-                <p className="item-sample">{item.explanation}</p>
+              <li key={idx} className="numbered-item">
+                <span className="item-title">{idx + 1}. {item.title}</span>
+                <p className="item-desc">{item.explanation}</p>
               </li>
             ))}
-          </ul>
+          </ol>
         )}
-      </div>
+      </section>
 
       {/* Top 3 Praises */}
-      <div className="card insight-card praise-card">
-        <div className="insight-title">
-          <h3>Top 3 Praises</h3>
-        </div>
+      <section className="card top-list-card">
+        <h3 className="section-title">Top 3 Praises</h3>
         {praises.length === 0 ? (
-          <p className="empty-notice">No praises found.</p>
+          <p className="empty-list-notice">No praises found.</p>
         ) : (
-          <ul className="insight-list">
+          <ol className="numbered-list">
             {praises.map((item, idx) => (
-              <li key={idx} className="insight-item">
-                <div className="item-header">
-                  <span className="topic-badge topic-pos">{item.title}</span>
-                </div>
-                <p className="item-sample">{item.explanation}</p>
+              <li key={idx} className="numbered-item">
+                <span className="item-title">{idx + 1}. {item.title}</span>
+                <p className="item-desc">{item.explanation}</p>
               </li>
             ))}
-          </ul>
+          </ol>
         )}
-      </div>
+      </section>
     </div>
   );
 }

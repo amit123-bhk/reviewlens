@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { filterReviews } from "../filterReviews.js";
 
 export function ReviewTable({ reviews, onReplyClick }) {
-  const [search, setSearch] = useState("");
   const [productFilter, setProductFilter] = useState("all");
   const [sentimentFilter, setSentimentFilter] = useState("all");
   const [topicFilter, setTopicFilter] = useState("all");
@@ -38,33 +37,25 @@ export function ReviewTable({ reviews, onReplyClick }) {
       product: productFilter,
       sentiment: sentimentFilter,
       topic: topicFilter,
-      search,
     });
-  }, [reviews, productFilter, sentimentFilter, topicFilter, search]);
+  }, [reviews, productFilter, sentimentFilter, topicFilter]);
 
   return (
     <section className="card table-card">
-      <div className="table-header">
-        <h2>Reviews Breakdown ({filtered.length})</h2>
+      <div className="table-toolbar">
+        <h3 className="table-title">Reviews ({filtered.length})</h3>
 
-        <div className="filter-bar">
-          <input
-            type="text"
-            className="input-search"
-            placeholder="Search reviews, IDs..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-
+        <div className="table-filters">
           {/* Product Dropdown */}
           <select
             value={productFilter}
             onChange={(e) => setProductFilter(e.target.value)}
             className="filter-select"
+            aria-label="Filter by product"
           >
             {productOptions.map((p) => (
               <option key={p} value={p}>
-                {p === "all" ? "All Products" : p}
+                {p === "all" ? "All products" : p}
               </option>
             ))}
           </select>
@@ -74,10 +65,13 @@ export function ReviewTable({ reviews, onReplyClick }) {
             value={sentimentFilter}
             onChange={(e) => setSentimentFilter(e.target.value)}
             className="filter-select"
+            aria-label="Filter by sentiment"
           >
             {sentimentOptions.map((s) => (
               <option key={s} value={s}>
-                {s === "all" ? "All Sentiments" : s.charAt(0).toUpperCase() + s.slice(1)}
+                {s === "all"
+                  ? "All sentiments"
+                  : s.charAt(0).toUpperCase() + s.slice(1)}
               </option>
             ))}
           </select>
@@ -87,154 +81,121 @@ export function ReviewTable({ reviews, onReplyClick }) {
             value={topicFilter}
             onChange={(e) => setTopicFilter(e.target.value)}
             className="filter-select"
+            aria-label="Filter by topic"
           >
             {topicOptions.map((t) => (
               <option key={t} value={t}>
-                {t === "all" ? "All Topics" : t.replace("_", " ")}
+                {t === "all" ? "All topics" : t.replace("_", " ")}
               </option>
             ))}
           </select>
         </div>
       </div>
 
-      <div className="table-responsive">
+      <div className="table-container">
         <table className="reviews-table">
           <thead>
             <tr>
               <th>ID</th>
               <th>Product</th>
               <th>Rating</th>
-              <th>Review Text</th>
+              <th>Review</th>
               <th>Sentiment</th>
               <th>Topics</th>
               <th>Summary</th>
-              <th>Needs Reply</th>
-              <th>Action</th>
+              <th>Reply</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan="9" className="empty-table">
+                <td colSpan="8" className="empty-table-cell">
                   No reviews match the selected filters.
                 </td>
               </tr>
             ) : (
               filtered.map((rev, idx) => {
                 const hasAnalysis = Boolean(rev.analysis);
-                const sentiment = rev.analysis?.sentiment || rev.status;
                 const needsReply = rev.analysis?.needs_reply;
-                const hasCachedReply = Boolean(rev.suggestedReply);
-                const hasInjection = Boolean(rev.possible_injection);
-                const isMismatch =
-                  rev.rating !== null &&
-                  rev.rating !== undefined &&
-                  ((rev.rating >= 4 && rev.analysis?.sentiment === "negative") ||
-                    (rev.rating <= 2 && rev.analysis?.sentiment === "positive"));
+                const isSkipped = rev.status === "skipped_empty";
+                const isDuplicate = Boolean(rev.duplicateOf);
+                const isFailed =
+                  rev.status === "invalid_row" || rev.status === "failed";
+
+                // Sentiment representation
+                let sentimentContent;
+                if (isSkipped) {
+                  sentimentContent = (
+                    <span className="text-muted">Skipped</span>
+                  );
+                } else if (isDuplicate) {
+                  sentimentContent = (
+                    <span className="text-muted">
+                      Duplicate of {rev.duplicateOf}
+                    </span>
+                  );
+                } else if (isFailed) {
+                  sentimentContent = (
+                    <span className="text-muted">Failed</span>
+                  );
+                } else {
+                  const s = rev.analysis?.sentiment;
+                  const dotClass =
+                    s === "positive"
+                      ? "dot dot-pos"
+                      : s === "negative"
+                      ? "dot dot-neg"
+                      : "dot dot-neu";
+                  const label = s
+                    ? s.charAt(0).toUpperCase() + s.slice(1)
+                    : "Neutral";
+
+                  sentimentContent = (
+                    <span className="cell-sentiment">
+                      <span className={dotClass}></span>
+                      <span>{label}</span>
+                    </span>
+                  );
+                }
+
+                // Rating representation
+                const ratingDisplay =
+                  rev.rating !== null && rev.rating !== undefined
+                    ? `${rev.rating}/5`
+                    : "N/A";
+
+                // Topics comma-separated
+                const topicsDisplay =
+                  hasAnalysis && rev.analysis.topics?.length > 0
+                    ? rev.analysis.topics.map((t) => t.replace("_", " ")).join(", ")
+                    : "N/A";
 
                 return (
                   <tr key={rev.review_id || `row-${idx}`}>
-                    {/* Review ID */}
-                    <td className="cell-id">
-                      <div className="id-title-row">
-                        <strong>{rev.review_id || "N/A"}</strong>
-                      </div>
-                      {rev.duplicateOf && (
-                        <span className="badge-tag tag-dup">dup of {rev.duplicateOf}</span>
-                      )}
-                      {rev.status === "skipped_empty" && (
-                        <span className="badge-tag tag-skipped">empty</span>
-                      )}
-                      {hasInjection && (
-                        <span
-                          className="badge-tag tag-injection"
-                          title="Possible prompt injection: phrase like 'ignore previous instructions' detected"
-                        >
-                          injection attempt
-                        </span>
-                      )}
-                    </td>
-
-                    {/* Product */}
+                    <td className="cell-id">{rev.review_id || "N/A"}</td>
                     <td className="cell-product">{rev.product || "N/A"}</td>
-
-                    {/* Rating or N/A */}
-                    <td className="cell-rating">
-                      {rev.rating !== null && rev.rating !== undefined ? (
-                        <span className="star-rating">{rev.rating} / 5</span>
-                      ) : (
-                        <span className="no-rating">N/A</span>
-                      )}
-                      {isMismatch && (
-                        <span
-                          className="badge-tag tag-mismatch"
-                          title="Rating vs Sentiment Mismatch"
-                        >
-                          Mismatch
-                        </span>
-                      )}
+                    <td className="cell-rating">{ratingDisplay}</td>
+                    <td>
+                      <div className="cell-review" title={rev.text || ""}>
+                        {rev.text || "N/A"}
+                      </div>
                     </td>
-
-                    {/* Review text */}
-                    <td className="cell-text">
-                      <span title={rev.text}>
-                        {rev.text || <em className="muted">Empty review text</em>}
-                      </span>
-                    </td>
-
-                    {/* Sentiment Badge */}
-                    <td className="cell-sentiment">
-                      <span className={`badge-sentiment sentiment-${sentiment}`}>
-                        {sentiment}
-                      </span>
-                    </td>
-
-                    {/* Topic Chips */}
-                    <td className="cell-topics">
-                      {hasAnalysis && rev.analysis.topics?.length > 0 ? (
-                        rev.analysis.topics.map((t) => (
-                          <span key={t} className="topic-pill">
-                            {t.replace("_", " ")}
-                          </span>
-                        ))
-                      ) : (
-                        <span className="muted">N/A</span>
-                      )}
-                    </td>
-
-                    {/* Summary */}
+                    <td>{sentimentContent}</td>
+                    <td className="cell-topics">{topicsDisplay}</td>
                     <td className="cell-summary">
-                      {hasAnalysis ? (
-                        <span>{rev.analysis.summary}</span>
-                      ) : (
-                        <em className="muted">{rev.status}</em>
-                      )}
+                      {hasAnalysis ? rev.analysis.summary : "N/A"}
                     </td>
-
-                    {/* Needs-Reply Flag */}
-                    <td className="cell-reply-flag">
-                      {hasAnalysis ? (
-                        needsReply ? (
-                          <span className="badge-reply-yes">Yes</span>
-                        ) : (
-                          <span className="badge-reply-no">No</span>
-                        )
-                      ) : (
-                        <span className="muted">N/A</span>
-                      )}
-                    </td>
-
-                    {/* Action: Suggest reply button on rows with needs_reply */}
-                    <td className="cell-action">
+                    <td className="cell-reply">
                       {needsReply ? (
                         <button
-                          className="btn-reply btn-reply-urgent"
+                          type="button"
+                          className="btn-reply-action"
                           onClick={() => onReplyClick && onReplyClick(rev)}
                         >
-                          {hasCachedReply ? "View reply" : "Suggest reply"}
+                          Suggest reply
                         </button>
                       ) : (
-                        <span className="muted">N/A</span>
+                        <span className="text-muted">N/A</span>
                       )}
                     </td>
                   </tr>

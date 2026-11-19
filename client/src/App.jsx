@@ -4,7 +4,7 @@ import { UploadBar } from "./components/UploadBar.jsx";
 import { SummaryCards } from "./components/SummaryCards.jsx";
 import { TopLists } from "./components/TopLists.jsx";
 import { ReviewTable } from "./components/ReviewTable.jsx";
-import { ReplyModal } from "./components/ReplyModal.jsx";
+import { ReplyDrawer } from "./components/ReplyDrawer.jsx";
 import "./App.css";
 
 export default function App() {
@@ -13,7 +13,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Reply Modal state
+  // Reply Drawer state
   const [activeReview, setActiveReview] = useState(null);
   const [generatedReplies, setGeneratedReplies] = useState({});
   const [replyLoading, setReplyLoading] = useState(false);
@@ -103,96 +103,61 @@ export default function App() {
     }
   };
 
-  const handleCopyReply = () => {
-    if (!activeReview || !generatedReplies[activeReview.review_id]) return;
-    navigator.clipboard.writeText(generatedReplies[activeReview.review_id]);
+  const handleCopyReply = (textToCopy) => {
+    const text =
+      textToCopy || (activeReview && generatedReplies[activeReview.review_id]);
+    if (!text) return;
+    navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const hasData = Boolean(data && data.reviews && data.reviews.length > 0 && insights);
+
   return (
     <div className="app-container">
-      {/* Header */}
+      {/* 1. Header */}
       <header className="header">
-        <div className="header-brand">
-          <div className="brand-logo">RL</div>
-          <div>
-            <h1>ReviewLens</h1>
-            <p className="subtitle">Customer review sentiment, topic analysis, and response drafting</p>
-          </div>
+        <div className="brand-logo">RL</div>
+        <div className="header-text">
+          <h1 className="header-title">ReviewLens</h1>
+          <p className="header-subtitle">
+            Customer review sentiment and reply drafting
+          </p>
         </div>
       </header>
 
-      {/* Upload Bar */}
+      {/* 2. Upload Bar */}
       <UploadBar onUpload={handleUpload} loading={loading} error={error} />
 
-      {/* Dashboard Body */}
-      {data ? (
+      {/* 8. Empty State or Dashboard Content */}
+      {hasData ? (
         <>
-          {/* Summary Cards */}
+          {/* 3 & 4. Stats and Run Summary Line */}
           <SummaryCards
             insights={insights}
             cleaningSummary={data.cleaningSummary}
             runStats={data.runStats}
           />
 
-          {/* Top 3 Complaints and Praises Side-by-Side */}
+          {/* 5. Top 3 Complaints & Praises */}
           <TopLists
-            topComplaints={insights?.topComplaints}
-            topPraises={insights?.topPraises}
+            topComplaints={insights.topComplaints}
+            topPraises={insights.topPraises}
           />
 
-          {/* Filterable Review Table */}
+          {/* 6. Reviews Table */}
           <ReviewTable
             reviews={data.reviews}
             onReplyClick={handleOpenReplyModal}
           />
-
-          {/* Cost and Speed Footer */}
-          {data.runStats && (
-            <footer className="cost-speed-footer">
-              <div className="footer-stat-item">
-                <span className="footer-label">Processing time:</span>
-                <strong className="footer-val">{data.runStats.elapsedMs} ms</strong>
-              </div>
-              <div className="footer-stat-item">
-                <span className="footer-label">AI calls:</span>
-                <strong className="footer-val">{data.runStats.aiCalls}</strong>
-              </div>
-              <div className="footer-stat-item">
-                <span className="footer-label">Cache hits:</span>
-                <strong className="footer-val">{data.runStats.cacheHits}</strong>
-              </div>
-              <div className="footer-stat-item">
-                <span className="footer-label">Cache efficiency:</span>
-                <strong className="footer-val">
-                  {Math.round(
-                    (data.runStats.cacheHits /
-                      (data.runStats.aiCalls + data.runStats.cacheHits || 1)) *
-                      100
-                  )}
-                  % cached
-                </strong>
-              </div>
-            </footer>
-          )}
         </>
       ) : (
-        /* Empty State before any upload */
-        <div className="card empty-state-card">
-          <div className="empty-state-content">
-            <h3>No Reviews Analyzed Yet</h3>
-            <p>
-              Upload your store's <code>reviews.csv</code> file using the form
-              above to clean data, extract sentiment, topics, summaries, and
-              generate suggested replies.
-            </p>
-          </div>
-        </div>
+        <div className="empty-state">Upload a CSV to see insights</div>
       )}
 
-      {/* Suggested Reply Modal */}
-      <ReplyModal
+      {/* 7. Reply Drawer */}
+      <ReplyDrawer
         review={activeReview}
         reply={activeReview ? generatedReplies[activeReview.review_id] : ""}
         loading={replyLoading}

@@ -11,78 +11,62 @@ export function SummaryCards({ insights, cleaningSummary, runStats }) {
     ratingMismatch,
   } = insights;
 
+  const duplicates = counts?.duplicates ?? cleaningSummary?.duplicates ?? 0;
+  const skipped = counts?.skippedEmpty ?? cleaningSummary?.skippedEmpty ?? 0;
+  const failed = counts?.failed ?? cleaningSummary?.invalidRows ?? 0;
+  const aiCalls = runStats?.aiCalls ?? 0;
+  const fromCache = runStats?.cacheHits ?? 0;
+  const elapsedMs = runStats?.elapsedMs ?? 0;
+
   return (
-    <div className="summary-wrapper">
-      <div className="stats-grid">
-        <div className="stat-card">
-          <span className="stat-label">Total Analysed</span>
-          <span className="stat-value">{sentimentCounts.total}</span>
-          <span className="stat-sub">Unique valid reviews</span>
-        </div>
+    <>
+      {/* 3. Stats Card with 6 columns separated by vertical dividers */}
+      <section className="card stats-card">
+        <div className="stats-grid">
+          <div className="stat-col">
+            <span className="stat-label">Total analysed</span>
+            <span className="stat-number">{sentimentCounts.total}</span>
+          </div>
 
-        <div className="stat-card stat-positive">
-          <span className="stat-label">Positive Sentiment</span>
-          <span className="stat-value">{sentimentPercentages.positive}%</span>
-          <span className="stat-sub">{sentimentCounts.positive} reviews</span>
-        </div>
+          <div className="stat-col">
+            <span className="stat-label">
+              <span className="dot dot-pos"></span> Positive %
+            </span>
+            <span className="stat-number">{sentimentPercentages.positive}%</span>
+          </div>
 
-        <div className="stat-card stat-neutral">
-          <span className="stat-label">Neutral Sentiment</span>
-          <span className="stat-value">{sentimentPercentages.neutral}%</span>
-          <span className="stat-sub">{sentimentCounts.neutral} reviews</span>
-        </div>
+          <div className="stat-col">
+            <span className="stat-label">
+              <span className="dot dot-neu"></span> Neutral %
+            </span>
+            <span className="stat-number">{sentimentPercentages.neutral}%</span>
+          </div>
 
-        <div className="stat-card stat-negative">
-          <span className="stat-label">Negative Sentiment</span>
-          <span className="stat-value">{sentimentPercentages.negative}%</span>
-          <span className="stat-sub">{sentimentCounts.negative} reviews</span>
-        </div>
+          <div className="stat-col">
+            <span className="stat-label">
+              <span className="dot dot-neg"></span> Negative %
+            </span>
+            <span className="stat-number">{sentimentPercentages.negative}%</span>
+          </div>
 
-        <div className="stat-card stat-reply">
-          <span className="stat-label">Needs Reply</span>
-          <span className="stat-value">{needsReplyCount}</span>
-          <span className="stat-sub">Action required</span>
-        </div>
+          <div className="stat-col">
+            <span className="stat-label">Needs reply</span>
+            <span className="stat-number">{needsReplyCount}</span>
+          </div>
 
-        {ratingMismatch && (
-          <div className="stat-card stat-agreement">
-            <span className="stat-label">Agreement %</span>
-            <span className="stat-value">{ratingMismatch.agreementPercent}%</span>
-            <span className="stat-sub">
-              {ratingMismatch.mismatchCount} mismatch{ratingMismatch.mismatchCount === 1 ? "" : "es"} in {ratingMismatch.ratedCount || 0} rated
+          <div className="stat-col">
+            <span className="stat-label">Rating agreement</span>
+            <span className="stat-number">
+              {ratingMismatch ? `${ratingMismatch.agreementPercent}%` : "N/A"}
             </span>
           </div>
-        )}
+        </div>
+      </section>
 
-        {runStats && (
-          <div className="stat-card stat-tech">
-            <span className="stat-label">AI Calls / Cache</span>
-            <span className="stat-value">
-              {runStats.aiCalls} / {runStats.cacheHits}
-            </span>
-            <span className="stat-sub">{runStats.elapsedMs}ms execution time</span>
-          </div>
-        )}
+      {/* 4. Run Summary Line */}
+      <div className="run-summary-line">
+        {sentimentCounts.total} analysed · {duplicates} duplicate · {skipped} skipped · {failed} failed · {aiCalls} AI calls · {fromCache} from cache · {elapsedMs} ms
       </div>
-
-      {/* Small counts bar for skipped, duplicates, failed */}
-      <div className="cleaning-bar">
-        <span>
-          <strong>Cleaning summary:</strong>
-        </span>
-        <span className="badge badge-valid">
-          Valid Analysed: {sentimentCounts.total}
-        </span>
-        <span className="badge badge-dup">
-          Duplicates Flagged: {counts?.duplicates ?? cleaningSummary?.duplicates ?? 0}
-        </span>
-        <span className="badge badge-skipped">
-          Skipped Empty: {counts?.skippedEmpty ?? cleaningSummary?.skippedEmpty ?? 0}
-        </span>
-        <span className="badge badge-invalid">
-          Analysis Failed: {counts?.failed ?? cleaningSummary?.invalidRows ?? 0}
-        </span>
-      </div>
-    </div>
+    </>
   );
 }

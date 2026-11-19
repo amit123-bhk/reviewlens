@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export function UploadBar({ onUpload, loading, error }) {
   const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
+    }
+  };
+
+  const handleChooseClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
@@ -17,42 +24,40 @@ export function UploadBar({ onUpload, loading, error }) {
 
   return (
     <section className="card upload-card">
-      <div className="upload-header">
-        <h2>Upload Reviews CSV</h2>
-        <p>Select a CSV file containing customer reviews to process.</p>
-      </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".csv"
+        onChange={handleFileChange}
+        disabled={loading}
+        style={{ display: "none" }}
+      />
+      <div className="upload-bar-inner">
+        <span className="upload-file-name">
+          {selectedFile ? selectedFile.name : "No file selected"}
+        </span>
 
-      <div className="upload-controls">
-        <label className="file-input-label">
-          <input
-            type="file"
-            accept=".csv"
-            onChange={handleFileChange}
+        <div className="upload-actions">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleChooseClick}
             disabled={loading}
-          />
-          <span>{selectedFile ? selectedFile.name : "Select reviews.csv..."}</span>
-        </label>
-
-        <button
-          className="btn btn-primary"
-          onClick={handleUploadClick}
-          disabled={loading || !selectedFile}
-        >
-          {loading ? "Analyzing..." : "Analyze Reviews"}
-        </button>
+          >
+            Choose file
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={handleUploadClick}
+            disabled={loading || !selectedFile}
+          >
+            {loading ? "Analyzing…" : "Analyze reviews"}
+          </button>
+        </div>
       </div>
 
-      {error && <div className="alert-error">{error}</div>}
-
-      {loading && (
-        <div className="loading-banner">
-          <div className="spinner"></div>
-          <div>
-            <strong>Processing reviews</strong>
-            <p>Cleaning records, checking cache, and running analysis...</p>
-          </div>
-        </div>
-      )}
+      {error && <div className="upload-error">{error}</div>}
     </section>
   );
 }
